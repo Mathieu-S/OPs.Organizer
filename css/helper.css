@@ -1,0 +1,42 @@
+.hlp-right-t {
+    margin-right: 10px;
+}
+
+.hlp-left-t {
+    margin-left: 10px;
+}
+
+.hlp-top-t {
+    margin-top: 10px;
+}
+
+.hlp-bottom-t {
+    margin-bottom: 10px;
+}
+
+.hlp-no-row {
+    margin-bottom: -20px;
+}
+
+.hlp-bottom-m {
+    margin-bottom: 20px;
+}
+
+.hlp-padding-m {
+    padding: 20px;
+}
+
+.hlp-maxHeight {
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
