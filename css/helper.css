@@ -31,6 +31,24 @@
     overflow-y: scroll;
 }
 
+.hlp-font-purista {
+    font-family: Purista, sans-serif;
+}
+
+@font-face {
+    font-family: "Purista";
+    src: local(Purista Bold), url("../fonts/purista/Purista Bold.otf");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Purista";
+    src: local(Purista Medium), url("../fonts/purista/Purista Medium.otf");
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
     display: flex;
     min-height: 100vh;
