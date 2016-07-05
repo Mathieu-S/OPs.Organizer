@@ -14,10 +14,6 @@
     margin-bottom: 10px;
 }
 
-.hlp-no-row {
-    margin-bottom: -20px;
-}
-
 .hlp-bottom-m {
     margin-bottom: 20px;
 }
@@ -28,54 +24,4 @@
 
 .hlp-padding-m {
     padding: 20px;
-}
-
-.hlp-maxHeight {
-    max-height: 500px;
-    overflow-y: scroll;
-}
-
-.hlp-font-purista {
-    font-family: Purista, sans-serif;
-}
-
-footer {
-    position: absolute;
-    width: 100%;
-    bottom: 0px;
-
-}
-
-footer.page-footer {
-    margin-top: 0px;
-    padding-top: 0px;
-}
-
-@font-face {
-    font-family: "Purista";
-    src: local(Purista Bold), url("../fonts/purista/Purista Bold.otf");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "Purista";
-    src: local(Purista Medium), url("../fonts/purista/Purista Medium.otf");
-    font-weight: normal;
-    font-style: normal;
-}
-
-html {
-    height: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-height: 100%;
-}
-
-main {
-    flex: 1 0 auto;
 }
