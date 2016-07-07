@@ -278,12 +278,12 @@ if (isset($_SESSION['id'])) {
                                         <div class="input-field">
                                             <select class="role">
                                                 <option value="" disabled selected>Selectionnez un rôle</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">Chef d'escouade</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">Chef d'equipe</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">Soldat régulier</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">MG</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">Grenadier</option>
-                                                <option data-icon="images/sample-1.jpg" class="circle" value="r">Grenadier</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'escouade</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'equipe</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Soldat régulier</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">MG</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Grenadier</option>
+                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Grenadier</option>
                                             </select>
                                             <label>Rôle</label>
                                         </div>
