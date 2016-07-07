@@ -18,11 +18,30 @@ function connectionDB() {
  */
 function addUser() {
     $db=connectionDB();
-    $query = $db->prepare("INSERT INTO `players`(`pseudo`, `mdp`, `email`) VALUES (:pseudo, :mdp, :email)");
-    $query->bindParam(':pseudo', $_POST['pseudo']);
-    $query->bindParam(':mdp', $_POST['mdp']);
+    //Vérifie si l'email n'est pas déjà utilisé
+    $query = $db->prepare("SELECT * FROM `players` WHERE email = :email");
     $query->bindParam(':email', $_POST['email']);
     $query->execute();
+    $row = $query->fetch();
+    if ($row['email'] == $_POST['email']){
+        return false;
+    }
+    //Vérifie si le speudo n'est pas déjà utilisé
+    $query = $db->prepare("SELECT * FROM `players` WHERE pseudo = :pseudo");
+    $query->bindParam(':pseudo', $_POST['pseudo']);
+    $query->execute();
+    $row = $query->fetch();
+    if ($row['pseudo'] == $_POST['pseudo']) {
+        return false;
+    }
+    //Ajoute l'utilisateur à la base de données.
+    $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
+    $query = $db->prepare("INSERT INTO `players`(`pseudo`, `mdp`, `email`) VALUES (:pseudo, :mdp, :email)");
+    $query->bindParam(':pseudo', $_POST['pseudo']);
+    $query->bindParam(':mdp', $mdp);
+    $query->bindParam(':email', $_POST['email']);
+    $query->execute();
+    return true;
 }
 
 /**
@@ -30,15 +49,14 @@ function addUser() {
  */
 function connectUser() {
     $db = connectionDB();
-    $query = $db->prepare("SELECT * FROM `players` WHERE `pseudo` = :pseudo AND `mdp` = :mdp");
+    $query = $db->prepare("SELECT * FROM `players` WHERE `pseudo` = :pseudo");
     $query->bindParam(':pseudo', $_POST['pseudo']);
-    $query->bindParam(':mdp', $_POST['mdp']);
     $query->execute();
     $row = $query->fetch();
-    if($query->rowCount()) {
+    if (password_verify($_POST['mdp'], $row['mdp'])) {
         $_SESSION['id'] = $row['id'];
         $_SESSION['pseudo'] = $row['pseudo'];
-        $_SESSION['lvlAbilitation'] = $row["lvlAbilitation"];
+        $_SESSION['lvlHabilitation'] = $row['lvlHabilitation'];
         return true;
     } else {
         return false;
