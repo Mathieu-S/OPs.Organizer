@@ -1,29 +1,39 @@
+<?php
+require("functions/functions.php");
+session_start();
+$missions = getMissions();
+
+var_dump($_SESSION);
+
+if(isset($_GET['logout'])) {
+    session_destroy();
+    header("location:index.php");
+}
+
+//Déverouille l'onget inscription si loged
+$isLoged = "disabled";
+if (isset($_SESSION['id'])) {
+    $isLoged = "";
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <head>
-        <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-        <!--Import Google Icon Font-->
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <!--Import materialize.css-->
-        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="css/custom.css"  media="screen,projection"/>
-        <link type="text/css" rel="stylesheet" href="css/helper.css"  media="screen,projection"/>
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/custom.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/helper.css"  media="screen,projection"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
     <header class="hlp-bottom-m">
-        <?php
-        require("functions/functions.php");
-        session_start();
-        $missions = getMissions();
-
-        var_dump($_SESSION);
-        ?>
 
         <h1 class="center-align font-purista"><b>OPs. ORGANIZER</b></h1>
 
