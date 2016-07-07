@@ -2,22 +2,22 @@
 require("functions/functions.php");
 session_start();
 
-var_dump($_POST);
-var_dump($_SESSION);
-
 $script = "";
 if (isset($_GET['logout'])) {
     session_destroy();
     header("location:index.php");
 } elseif (array_key_exists('INS',$_POST)) {
-    addUser();
-    connectUser();
-    header("location:index.php");
+    $script = "<script>Materialize.toast('Le pseudo ou l\'email est déjà utilisé', 4000)</script>";
+    if (addUser()) {
+        $script = "<script>Materialize.toast('Une erreur inatendu c\'est produite. Veuillez contacter SPG', 4000)</script>";
+        if (connectUser()) {
+            header("location:index.php");
+        }
+    }
 } elseif (array_key_exists('CNX',$_POST)) {
+    $script = "<script>Materialize.toast('Mot de passe invalide !', 4000)</script>";
     if (connectUser()) {
         header("location:index.php");
-    } else {
-        $script = "<script>Materialize.toast('Mot de passe invalide !', 4000)</script>";
     }
 }
 ?>
