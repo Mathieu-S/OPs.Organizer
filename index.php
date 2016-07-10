@@ -2,12 +2,20 @@
 require("functions/functions.php");
 session_start();
 $missions = getMissions();
+$script = "";
 
 var_dump($_SESSION);
 
+//Déconnecte l'utilisateur si la page à un GET logout
 if(isset($_GET['logout'])) {
     session_destroy();
     header("location:index.php");
+
+//Affiche un avertissement si l'utilisateur à voulu créer une mission avec une habilitaion trop basse
+} elseif (isset($_GET['noAcces'])) {
+    $script = "<script>Materialize.toast('Votre niveau d\'habilitation est trop faible pour pouvoir créer une mission.', 4000)</script>";
+} elseif (isset($_GET['noLoged'])) {
+    $script = "<script>Materialize.toast('Vous devez être connecter pour créer une mission', 4000)</script>";
 }
 
 //Déverouille l'onget inscription si loged
@@ -375,6 +383,7 @@ if (isset($_SESSION['id'])) {
             $('.tooltipped').tooltip({delay: 50});
         });
     </script>
+    <?= $script;?>
 </body>
 
 </html>
