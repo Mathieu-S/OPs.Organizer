@@ -5,6 +5,7 @@ $missions = getMissions();
 $script = "";
 
 var_dump($_SESSION);
+var_dump($_POST);
 
 //Déconnecte l'utilisateur si la page à un GET logout
 if(isset($_GET['logout'])) {
@@ -16,11 +17,17 @@ if(isset($_GET['logout'])) {
     $script = "<script>Materialize.toast('Votre niveau d\'habilitation est trop faible pour pouvoir créer une mission.', 4000)</script>";
 } elseif (isset($_GET['noLoged'])) {
     $script = "<script>Materialize.toast('Vous devez être connecter pour créer une mission', 4000)</script>";
+
+
+} elseif (isset($_POST['INS'])) {
+    inscriptionMission();
 }
+
+
 
 //Déverouille l'onget inscription si loged
 $isLoged = "disabled";
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['idPlayer'])) {
     $isLoged = "";
 }
 ?>
@@ -49,7 +56,7 @@ if (isset($_SESSION['id'])) {
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
                 <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉ UNE MISSION</a></div>
                 <?php
-                if (array_key_exists('id',$_SESSION)) {
+                if (array_key_exists('idPlayer',$_SESSION)) {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
                 } else {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
@@ -62,7 +69,6 @@ if (isset($_SESSION['id'])) {
     <section class="container hlp-bottom-l">
         <ul class="collapsible popout" data-collapsible="accordion">
             <?php foreach ($missions as $mission) { ?>
-
             <li>
                 <!--Cadre mission-->
                 <div class="collapsible-header">
@@ -135,18 +141,6 @@ if (isset($_SESSION['id'])) {
                                             <td>Alvin</td>
                                             <td>Eclair</td>
                                         </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -165,18 +159,6 @@ if (isset($_SESSION['id'])) {
                                         <tr>
                                             <td>Alvin</td>
                                             <td>Eclair</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -197,18 +179,6 @@ if (isset($_SESSION['id'])) {
                                             <td>Alvin</td>
                                             <td>Eclair</td>
                                         </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -227,18 +197,6 @@ if (isset($_SESSION['id'])) {
                                         <tr>
                                             <td>Alvin</td>
                                             <td>Eclair</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -259,18 +217,6 @@ if (isset($_SESSION['id'])) {
                                             <td>Alvin</td>
                                             <td>Eclair</td>
                                         </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alan</td>
-                                            <td>Jellybean</td>
-                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -279,18 +225,18 @@ if (isset($_SESSION['id'])) {
 
                         <!--Formulaire d'inscription-->
                         <div id="inscription<?php echo($mission['id']); ?>" class="col s12">
-                            <form class="container hlp-padding-m">
-                                <h4 class="center-align font-purista">STATUS ACTUEL : NON INSCRIT</h4><br>
+                            <form method="post" class="container hlp-padding-m">
+                                <?php $presence = getPresenceByIdMission($mission['id']) ?>
+                                <h4 class="center-align font-purista">STATUS ACTUEL : <?php echo $presence ?></h4><br>
                                 <div class="row">
                                     <div class="col s4">
                                         <div class="input-field">
-                                            <select class="role">
+                                            <select required name="role" class="role">
                                                 <option value="" disabled selected>Selectionnez un rôle</option>
                                                 <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'escouade</option>
                                                 <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'equipe</option>
                                                 <option value="r" data-icon="images/sample-1.jpg" class="circle">Soldat régulier</option>
                                                 <option value="r" data-icon="images/sample-1.jpg" class="circle">MG</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Grenadier</option>
                                                 <option value="r" data-icon="images/sample-1.jpg" class="circle">Grenadier</option>
                                             </select>
                                             <label>Rôle</label>
@@ -299,13 +245,13 @@ if (isset($_SESSION['id'])) {
 
                                     <div class="col s4">
                                         <div class="input-field">
-                                            <select class="escouade">
+                                            <select required name="escouade" class="escouade">
                                                 <option value="" disabled selected>Selectionnez une escouade</option>
-                                                <option value="" data-icon="images/yuna.jpg" class="circle">Omega</option>
-                                                <option value="" data-icon="images/sample-1.jpg" class="circle">Alpha</option>
-                                                <option value="" data-icon="images/office.jpg" class="circle">Bravo</option>
-                                                <option value="" data-icon="images/yuna.jpg" class="circle">Charlie</option>
-                                                <option value="" data-icon="images/yuna.jpg" class="circle">Delta</option>
+                                                <option value="omega" data-icon="images/yuna.jpg" class="circle">Omega</option>
+                                                <option value="alpha" data-icon="images/sample-1.jpg" class="circle">Alpha</option>
+                                                <option value="bravo" data-icon="images/office.jpg" class="circle">Bravo</option>
+                                                <option value="charlie" data-icon="images/yuna.jpg" class="circle">Charlie</option>
+                                                <option value="delta" data-icon="images/yuna.jpg" class="circle">Delta</option>
                                             </select>
                                             <label>Escouade</label>
                                         </div>
@@ -313,29 +259,32 @@ if (isset($_SESSION['id'])) {
 
                                     <div class="col s4">
                                         <div class="input-field">
-                                            <select class="groupement">
+                                            <select required name="groupement" class="groupement">
                                                 <option value="" disabled selected>Selectionnez un groupement</option>
-                                                <option value="" data-icon="images/sample-1.jpg" class="circle">Rouge</option>
-                                                <option value="" data-icon="images/office.jpg" class="circle">Bleu</option>
-                                                <option value="" data-icon="images/yuna.jpg" class="circle">Vert</option>
-                                                <option value="" data-icon="images/yuna.jpg" class="circle">Jaune</option>
+                                                <option value="rouge" data-icon="img/rouge.png" class="circle">Rouge</option>
+                                                <option value="bleu" data-icon="img/bleu.png" class="circle">Bleu</option>
+                                                <option value="vert" data-icon="img/vert.png" class="circle">Vert</option>
+                                                <option value="jaune" data-icon="img/jaune.png" class="circle">Jaune</option>
                                             </select>
                                             <label>Groupement</label>
                                         </div>
                                     </div>
 
                                     <div class="input-field col s6 offset-s3">
-                                        <select class="presence">
+                                        <select required name="presence" class="presence">
                                             <option value="" disabled selected>Indiquez le statut de votre présence</option>
-                                            <option value="1">Présent</option>
-                                            <option value="2">Probable</option>
-                                            <option value="3">Absent</option>
+                                            <option value="PRESENT">Présent</option>
+                                            <option value="PROBABLE">Probable</option>
+                                            <option value="ABSENT">Absent</option>
                                         </select>
                                         <label>Présence</label>
                                     </div>
+
+                                    <input name="idMission" type="text" value="<?php echo($mission['id']); ?>" hidden>
                                 </div>
 
                                 <!-- Trigger Modal d'avertissement -->
+
                                 <div class="center-align">
                                     <a class="modal-trigger waves-effect waves-light btn font-purista" href="#modalInscription<?php echo($mission['id']); ?>">Mettre à jour votre statut</a>
                                 </div>
@@ -348,9 +297,10 @@ if (isset($_SESSION['id'])) {
                                         <p class="flow-text center-align">Le statut de votre présence ne peut plus être changer à partir du moment où
                                             vous avez confirmé votre présence</p>
                                     </div>
+
                                     <div class="modal-footer">
-                                        <a href="#!" class="modal-action modal-close waves-effect waves-red btn-flat">Annuler</a>
-                                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Continuer</a>
+                                        <button class="btn waves-effect waves-light font-purista red modal-action modal-close" style="margin-right: 6px; margin-left: 20px;">Annuler</button>
+                                        <button class="btn waves-effect waves-light font-purista green" type="submit" name="INS" value="true">Valider</button>
                                     </div>
                                 </div>
                             </form>

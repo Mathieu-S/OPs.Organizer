@@ -54,7 +54,7 @@ function connectUser() {
     $query->execute();
     $row = $query->fetch();
     if (password_verify($_POST['mdp'], $row['mdp'])) {
-        $_SESSION['id'] = $row['id'];
+        $_SESSION['idPlayer'] = $row['id'];
         $_SESSION['pseudo'] = $row['pseudo'];
         $_SESSION['lvlHabilitation'] = $row['lvlHabilitation'];
         return true;
@@ -82,7 +82,6 @@ function getMissions() {
  */
 function addMission() {
     $db = connectionDB();
-    //Vérifie si l'email n'est pas déjà utilisé
     $query = $db->prepare("INSERT INTO `missions`(`nom`, `date`, `nbRqMinPlayer`, `nbRqMaxPlayer`, `faction`, `map`, `briefing`, `objectif`) VALUES (:nomMission,:dateMission,:minPlayers,:maxPlayers,:faction,:localisation,:situation,:objetctif)");
     $query->bindParam(':nomMission', $_POST['nomMission']);
     $query->bindParam(':dateMission', $_POST['date']);
@@ -94,4 +93,40 @@ function addMission() {
     $query->bindParam(':objetctif', $_POST['objetctif']);
     $query->execute();
     return true;
+}
+
+//////////////////////////////////////
+//    Gère les escouades/présence   //
+//////////////////////////////////////
+
+/**
+ * Ajoute une mission
+ */
+function inscriptionMission() {
+    $db = connectionDB();
+    $query = $db->prepare("INSERT INTO `escouades`(`idMission`, `escouade`, `groupement`, `idPlayer`, `role`, `presence`) VALUES (:idMission,:escouade,:groupement,:idPlayer,:role,:presence)");
+    $query->bindParam(':idMission', $_POST['idMission']);
+    $query->bindParam(':escouade', $_POST['escouade']);
+    $query->bindParam(':groupement', $_POST['groupement']);
+    $query->bindParam(':idPlayer', $_SESSION['idPlayer']);
+    $query->bindParam(':role', $_POST['role']);
+    $query->bindParam(':presence', $_POST['presence']);
+    $query->execute();
+    return true;
+}
+
+/**
+ * indique la présence ou non du joueur
+ */
+function getPresenceByIdMission($idMission) {
+    $db=connectionDB();
+    $query = $db->prepare("SELECT `presence` FROM `escouades` WHERE `idPlayer`=:idPlayer AND `idMission`=:idMission");
+    $query->bindParam(':idPlayer', $_SESSION['idPlayer']);
+    $query->bindParam(':idMission', $idMission);
+    $query->execute();
+    $result = ($query->fetch());
+    if (empty($result)) {
+        return "NON INSCRIT";
+    }
+    return $result['presence'];
 }
