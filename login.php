@@ -64,19 +64,19 @@ if (isset($_GET['logout'])) {
                         <h4 class="font-purista center-align hlp-bottom-m">S'INSCRIRE</h4>
                         <div class="input-field">
                             <i class="material-icons prefix">person</i>
-                            <input id="pseudo" name="pseudo" type="text" class="validate">
+                            <input required id="pseudo" name="pseudo" type="text" class="validate">
                             <label for="pseudo">Pseudo</label>
                         </div>
 
                         <div class="input-field">
                             <i class="material-icons prefix">lock</i>
-                            <input id="mdp" name="mdp" type="password" class="validate">
+                            <input required id="mdp" name="mdp" type="password" class="validate">
                             <label for="mdp">Password</label>
                         </div>
 
                         <div class="input-field">
                             <i class="material-icons prefix">mail</i>
-                            <input id="email" name="email" type="email" class="validate">
+                            <input required id="email" name="email" type="email" class="validate">
                             <label for="email" data-error="Email invalide" data-success="right">Email</label>
                         </div>
                     </div>
@@ -95,13 +95,13 @@ if (isset($_GET['logout'])) {
                         <h4 class="font-purista center-align hlp-bottom-m">SE CONNECTER</h4>
                         <div class="input-field">
                             <i class="material-icons prefix">person</i>
-                            <input id="pseudo" name="pseudo" type="text" class="validate">
+                            <input required id="pseudo" name="pseudo" type="text" class="validate">
                             <label for="pseudo">Pseudo</label>
                         </div>
 
                         <div class="input-field">
                             <i class="material-icons prefix">lock</i>
-                            <input id="mdp" name="mdp" type="password" class="validate">
+                            <input required id="mdp" name="mdp" type="password" class="validate">
                             <label for="mdp">Password</label>
                         </div>
                     </div>
