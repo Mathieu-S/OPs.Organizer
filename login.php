@@ -46,7 +46,7 @@ if (isset($_GET['logout'])) {
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
                 <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉ UNE MISSION</a></div>
                 <?php
-                if (array_key_exists('id',$_SESSION)) {
+                if (array_key_exists('idPlayer',$_SESSION)) {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
                 } else {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
