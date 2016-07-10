@@ -1,21 +1,31 @@
 <?php
 require("functions/functions.php");
 session_start();
-$missions = getMissions();
-
-var_dump($_SESSION);
-var_dump($_POST);
+$script = "";
 
 if(isset($_GET['logout'])) {
     session_destroy();
     header("location:index.php");
+} elseif (isset($_POST['nomMission'])
+    && isset($_POST['faction'])
+    && isset($_POST['localisation'])
+    && isset($_POST['date'])
+    && isset($_POST['minPlayers'])
+    && isset($_POST['maxPlayers'])
+    && isset($_POST['situation'])
+    && isset($_POST['objetctif'])) {
+    if (addMission()) {
+        header("location:index.php");
+    }
 }
 
-//Déverouille l'onget inscription si loged
-$isLoged = "disabled";
-if (isset($_SESSION['id'])) {
-    $isLoged = "";
+//Renvoie au menu principale si le niveau d'habilitation est trop bas ou non connecter
+if (is_null($_SESSION['lvlHabilitation'])) {
+    header("location:index.php?noLoged");
+} elseif ($_SESSION['lvlHabilitation'] != "1") {
+    header("location:index.php?noAcces");
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +52,13 @@ if (isset($_SESSION['id'])) {
             <div class="row">
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
                 <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉ UNE MISSION</a></div>
-                <div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div>
+                <?php
+                if (array_key_exists('id',$_SESSION)) {
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
+                } else {
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
+                }
+                ?>
             </div>
         </nav>
     </header>
@@ -55,18 +71,18 @@ if (isset($_SESSION['id'])) {
                 <div class="row">
                     <div class="col s12 m6 offset-m3">
                         <div class="input-field">
-                            <input name="nomMission" id="nomMission" type="text" class="validate">
+                            <input required name="nomMission" id="nomMission" type="text" class="validate">
                             <label for="nomMission">Nom de la mission</label>
                         </div>
                     </div>
 
                     <div class="col s12 m4">
                         <div class="input-field">
-                            <select name="faction" id="faction">
+                            <select required name="faction" id="faction">
                                 <option value="" disabled selected>Choisissez une faction</option>
-                                <option value="1">Nato</option>
-                                <option value="2">CSAT</option>
-                                <option value="3">AAF</option>
+                                <option value="Nato">Nato</option>
+                                <option value="CSAT">CSAT</option>
+                                <option value="AAF">AAF</option>
                             </select>
                             <label for="faction">Faction jouer</label>
                         </div>
@@ -74,11 +90,11 @@ if (isset($_SESSION['id'])) {
 
                     <div class="col s12 m4">
                         <div class="input-field">
-                            <select name="localisation" id="localisation">
+                            <select required name="localisation" id="localisation">
                                 <option value="" disabled selected>Choisissez une localisation</option>
-                                <option value="1">Stratis</option>
-                                <option value="2">Altis</option>
-                                <option value="3">Tanoa</option>
+                                <option value="Stratis">Stratis</option>
+                                <option value="Altis">Altis</option>
+                                <option value="Tanoa">Tanoa</option>
                             </select>
                             <label for="localisation">Localisation</label>
                         </div>
@@ -86,7 +102,7 @@ if (isset($_SESSION['id'])) {
 
                     <div class="col s12 m4">
                         <div class="input-field">
-                            <input name="date" type="text" class="datepicker">
+                            <input required name="date" type="text" class="datepicker">
                             <label for="date">Date</label>
                         </div>
                     </div>
@@ -100,12 +116,12 @@ if (isset($_SESSION['id'])) {
 
                 <div class="row">
                     <div class="input-field col s12">
-                        <textarea name="situation" id="situation" class="materialize-textarea"></textarea>
+                        <textarea required name="situation" id="situation" class="materialize-textarea"></textarea>
                         <label for="situation">Situation</label>
                     </div>
 
                     <div class="input-field col s12">
-                        <textarea name="objetctif" id="objetctif" class="materialize-textarea"></textarea>
+                        <textarea required name="objetctif" id="objetctif" class="materialize-textarea"></textarea>
                         <label for="objetctif">Objetctif</label>
                     </div>
                 </div>
@@ -150,12 +166,12 @@ if (isset($_SESSION['id'])) {
     <script>
         var slider = document.getElementById('nbRqPlayer');
         noUiSlider.create(slider, {
-            start: [20, 80],
+            start: [8, 26],
             connect: true,
             step: 1,
             range: {
-                'min': 0,
-                'max': 100
+                'min': 2,
+                'max': 32
             },
             format: wNumb({
                 decimals: 0
@@ -186,6 +202,7 @@ if (isset($_SESSION['id'])) {
             slider.noUiSlider.set([null, this.value]);
         });
     </script>
+    <?= $script;?>
 </body>
 
 </html>
