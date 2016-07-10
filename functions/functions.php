@@ -76,3 +76,22 @@ function getMissions() {
     $query->execute();
     return $query->fetchAll();
 }
+
+/**
+ * Ajoute une mission
+ */
+function addMission() {
+    $db = connectionDB();
+    //Vérifie si l'email n'est pas déjà utilisé
+    $query = $db->prepare("INSERT INTO `missions`(`nom`, `date`, `nbRqMinPlayer`, `nbRqMaxPlayer`, `faction`, `map`, `briefing`, `objectif`) VALUES (:nomMission,:dateMission,:minPlayers,:maxPlayers,:faction,:localisation,:situation,:objetctif)");
+    $query->bindParam(':nomMission', $_POST['nomMission']);
+    $query->bindParam(':dateMission', $_POST['date']);
+    $query->bindParam(':minPlayers', $_POST['minPlayers']);
+    $query->bindParam(':maxPlayers', $_POST['maxPlayers']);
+    $query->bindParam(':faction', $_POST['faction']);
+    $query->bindParam(':localisation', $_POST['localisation']);
+    $query->bindParam(':situation', $_POST['situation']);
+    $query->bindParam(':objetctif', $_POST['objetctif']);
+    $query->execute();
+    return true;
+}
