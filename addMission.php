@@ -51,12 +51,12 @@ if (is_null($_SESSION['lvlHabilitation'])) {
         <nav class="container">
             <div class="row">
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
-                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉ UNE MISSION</a></div>
+                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉR UNE MISSION</a></div>
                 <?php
-                if (array_key_exists('idPlayer',$_SESSION)) {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
-                } else {
+                if (!array_key_exists('idPlayer',$_SESSION) OR empty($_SESSION['idPlayer'])) {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
+                } else {
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
                 }
                 ?>
             </div>
@@ -66,7 +66,7 @@ if (is_null($_SESSION['lvlHabilitation'])) {
     <section class="container hlp-bottom-l">
         <form class="card" method="post">
             <div class="card-content">
-                <h4 class="font-purista center-align">CRÉÉ UNE MISSION</h4>
+                <h4 class="font-purista center-align">CRÉÉR UNE MISSION</h4>
 
                 <div class="row">
                     <div class="col s12 m6 offset-m3">
