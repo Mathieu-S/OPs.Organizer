@@ -4,9 +4,6 @@ session_start();
 $missions = getMissions();
 $script = "";
 
-var_dump($_SESSION);
-var_dump($_POST);
-
 //Déconnecte l'utilisateur si la page à un GET logout
 if(isset($_GET['logout'])) {
     session_destroy();
@@ -54,12 +51,12 @@ if (isset($_SESSION['idPlayer'])) {
         <nav class="container">
             <div class="row">
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
-                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉ UNE MISSION</a></div>
+                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉR UNE MISSION</a></div>
                 <?php
-                if (array_key_exists('idPlayer',$_SESSION)) {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
-                } else {
+                if (!array_key_exists('idPlayer',$_SESSION) OR empty($_SESSION['idPlayer'])) {
                     ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
+                } else {
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
                 }
                 ?>
             </div>
@@ -125,6 +122,7 @@ if (isset($_SESSION['idPlayer'])) {
 
                         <!--Tableau des escouades de la mission-->
                         <div id="escouades<?php echo($mission['id']); ?>" class="col s12">
+                            <?php $escouades = getEscouadesByIdMisssion($mission['id']); ?>
                             <div class="row no-row hlp-padding-m">
                                 <div class="col s6 offset-s3">
                                     <h4 class="center-align font-purista">OMEGA</h4>
@@ -137,10 +135,16 @@ if (isset($_SESSION['idPlayer'])) {
                                         </thead>
 
                                         <tbody>
-                                        <tr>
-                                            <td>Alvin</td>
-                                            <td>Eclair</td>
-                                        </tr>
+                                        <?php
+                                            foreach ($escouades as $escouade) {
+                                                if ($escouade['escouade'] == "omega"){ ?>
+                                                    <tr>
+                                                        <td><?php echo $escouade['pseudo']; ?></td>
+                                                        <td><?php echo $escouade['role']; ?></td>
+                                                    </tr>
+                                                <?php  }
+                                            }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -156,10 +160,16 @@ if (isset($_SESSION['idPlayer'])) {
                                         </thead>
 
                                         <tbody>
-                                        <tr>
-                                            <td>Alvin</td>
-                                            <td>Eclair</td>
-                                        </tr>
+                                        <?php
+                                        foreach ($escouades as $escouade) {
+                                            if ($escouade['escouade'] == "alpha"){ ?>
+                                                <tr>
+                                                    <td><?php echo $escouade['pseudo']; ?></td>
+                                                    <td><?php echo $escouade['role']; ?></td>
+                                                </tr>
+                                            <?php  }
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -175,10 +185,16 @@ if (isset($_SESSION['idPlayer'])) {
                                         </thead>
 
                                         <tbody>
-                                        <tr>
-                                            <td>Alvin</td>
-                                            <td>Eclair</td>
-                                        </tr>
+                                        <?php
+                                        foreach ($escouades as $escouade) {
+                                            if ($escouade['escouade'] == "bravo"){ ?>
+                                                <tr>
+                                                    <td><?php echo $escouade['pseudo']; ?></td>
+                                                    <td><?php echo $escouade['role']; ?></td>
+                                                </tr>
+                                            <?php  }
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -194,10 +210,16 @@ if (isset($_SESSION['idPlayer'])) {
                                         </thead>
 
                                         <tbody>
-                                        <tr>
-                                            <td>Alvin</td>
-                                            <td>Eclair</td>
-                                        </tr>
+                                        <?php
+                                        foreach ($escouades as $escouade) {
+                                            if ($escouade['escouade'] == "charlie"){ ?>
+                                                <tr>
+                                                    <td><?php echo $escouade['pseudo']; ?></td>
+                                                    <td><?php echo $escouade['role']; ?></td>
+                                                </tr>
+                                            <?php  }
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -213,10 +235,16 @@ if (isset($_SESSION['idPlayer'])) {
                                         </thead>
 
                                         <tbody>
-                                        <tr>
-                                            <td>Alvin</td>
-                                            <td>Eclair</td>
-                                        </tr>
+                                        <?php
+                                        foreach ($escouades as $escouade) {
+                                            if ($escouade['escouade'] == "delta"){ ?>
+                                                <tr>
+                                                    <td><?php echo $escouade['pseudo']; ?></td>
+                                                    <td><?php echo $escouade['role']; ?></td>
+                                                </tr>
+                                            <?php  }
+                                        }
+                                        ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -233,11 +261,13 @@ if (isset($_SESSION['idPlayer'])) {
                                         <div class="input-field">
                                             <select required name="role" class="role">
                                                 <option value="" disabled selected>Selectionnez un rôle</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'escouade</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Chef d'equipe</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Soldat régulier</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">MG</option>
-                                                <option value="r" data-icon="images/sample-1.jpg" class="circle">Grenadier</option>
+                                                <option value="Commandant" data-icon="images/sample-1.jpg" class="circle">Commandant</option>
+                                                <option value="Chef d'escouade" data-icon="images/sample-1.jpg" class="circle">Chef d'escouade</option>
+                                                <option value="Chef d'equipe" data-icon="images/sample-1.jpg" class="circle">Chef d'equipe</option>
+                                                <option value="Médecin" data-icon="images/sample-1.jpg" class="circle">Médecin</option>
+                                                <option value="Sapeur" data-icon="images/sample-1.jpg" class="circle">Sapeur</option>
+                                                <option value="MG" data-icon="images/sample-1.jpg" class="circle">MG</option>
+                                                <option value="Soldat régulier" data-icon="images/sample-1.jpg" class="circle">Soldat régulier</option>
                                             </select>
                                             <label>Rôle</label>
                                         </div>
@@ -261,6 +291,7 @@ if (isset($_SESSION['idPlayer'])) {
                                         <div class="input-field">
                                             <select required name="groupement" class="groupement">
                                                 <option value="" disabled selected>Selectionnez un groupement</option>
+                                                <option value="aucun">N/A</option>
                                                 <option value="rouge" data-icon="img/rouge.png" class="circle">Rouge</option>
                                                 <option value="bleu" data-icon="img/bleu.png" class="circle">Bleu</option>
                                                 <option value="vert" data-icon="img/vert.png" class="circle">Vert</option>
@@ -318,7 +349,7 @@ if (isset($_SESSION['idPlayer'])) {
         <div class="footer-copyright">
             <div class="container">
                 © 2016 Copyright SinTeam Gaming
-                <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+                <a class="grey-text text-lighten-4 right" href="#!">V 1.0</a>
             </div>
         </div>
     </footer>
