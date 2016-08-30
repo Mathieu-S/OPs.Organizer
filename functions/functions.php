@@ -100,23 +100,72 @@ function addMission() {
 //////////////////////////////////////
 
 /**
+ * Vérifie si déjà inscrit pour la mission
+ */
+function dejaInscrit($idMission) {
+    $db = connectionDB();
+    $query = $db->prepare("SELECT * FROM `escouades` WHERE `idMission` = :idMission AND `idPlayer` = :idPlayer");
+    $query->bindParam(':idMission', $idMission);
+    $query->bindParam(':idPlayer', $_SESSION['idPlayer']);
+    $query->execute();
+    $data = $query->fetchAll();
+    if(key_exists('0', $data) ) {
+        return $data['0']['enter'];
+    }
+    return false;
+}
+
+/**
+ * Rafraichie le nombre de joueurs inscrit à une mission
+ */
+function refreshNbPlayerInscrit($idMission) {
+    $db = connectionDB();
+    $query = $db->prepare("SELECT COUNT('idPlayer') FROM `escouades` WHERE `idMission` = :idMission AND (`presence` = 'PRESENT' OR `presence` = 'PROBABLE')");
+    $query->bindParam(':idMission', $idMission);
+    $query->execute();
+    $data = $query->fetch();
+    $query = $db->prepare("UPDATE `missions` SET `nbInsPlayer`=:nbInsPlayer WHERE `id`=:idMission");
+    $query->bindParam(':nbInsPlayer', $data['0']);
+    $query->bindParam(':idMission', $idMission);
+    $query->execute();
+}
+
+/**
  * Ajoute une mission
  */
 function inscriptionMission() {
     $db = connectionDB();
-    $query = $db->prepare("INSERT INTO `escouades`(`idMission`, `escouade`, `groupement`, `idPlayer`, `role`, `presence`) VALUES (:idMission,:escouade,:groupement,:idPlayer,:role,:presence)");
-    $query->bindParam(':idMission', $_POST['idMission']);
-    $query->bindParam(':escouade', $_POST['escouade']);
-    $query->bindParam(':groupement', $_POST['groupement']);
-    $query->bindParam(':idPlayer', $_SESSION['idPlayer']);
-    $query->bindParam(':role', $_POST['role']);
-    $query->bindParam(':presence', $_POST['presence']);
-    $query->execute();
-    return true;
+
+    $inscrit = dejaInscrit($_POST['idMission']);
+
+    if ($inscrit) {
+        $query = $db->prepare("UPDATE `escouades` SET `escouade`=:escouade,`groupement`=:groupement,`role`=:role,`presence`=:presence WHERE `enter`=:enter");
+        $query->bindParam(':enter', $inscrit);
+        $query->bindParam(':escouade', $_POST['escouade']);
+        $query->bindParam(':groupement', $_POST['groupement']);
+        $query->bindParam(':role', $_POST['role']);
+        $query->bindParam(':presence', $_POST['presence']);
+        $query->execute();
+        refreshNbPlayerInscrit($_POST['idMission']);
+        header("Refresh:0");
+        return true;
+    } else {
+        $query = $db->prepare("INSERT INTO `escouades`(`idMission`, `escouade`, `groupement`, `idPlayer`, `role`, `presence`) VALUES (:idMission,:escouade,:groupement,:idPlayer,:role,:presence)");
+        $query->bindParam(':idMission', $_POST['idMission']);
+        $query->bindParam(':escouade', $_POST['escouade']);
+        $query->bindParam(':groupement', $_POST['groupement']);
+        $query->bindParam(':idPlayer', $_SESSION['idPlayer']);
+        $query->bindParam(':role', $_POST['role']);
+        $query->bindParam(':presence', $_POST['presence']);
+        $query->execute();
+        refreshNbPlayerInscrit($_POST['idMission']);
+        header("Refresh:0");
+        return true;
+    }
 }
 
 /**
- * indique la présence ou non du joueur
+ * Indique la présence ou non du joueur
  */
 function getPresenceByIdMission($idMission) {
     $db=connectionDB();
@@ -129,4 +178,16 @@ function getPresenceByIdMission($idMission) {
         return "NON INSCRIT";
     }
     return $result['presence'];
+}
+
+/**
+ * indique la présence ou non du joueur
+ */
+function getEscouadesByIdMisssion($idMission) {
+    $db=connectionDB();
+    $query = $db->prepare("SELECT * FROM `escouades` INNER JOIN `players` WHERE `escouades`.`idPlayer` = `players`.`id` AND `idMission` = :idMission AND (`presence` = 'PRESENT' OR `presence` = 'PROBABLE')");
+    $query->bindParam(':idMission', $idMission);
+    $query->execute();
+    $data = ($query->fetchAll());
+    return $data;
 }
