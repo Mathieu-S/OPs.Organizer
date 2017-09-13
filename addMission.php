@@ -51,12 +51,12 @@ if (is_null($_SESSION['lvlHabilitation'])) {
         <nav class="container">
             <div class="row">
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
-                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉR UNE MISSION</a></div>
+                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉER UNE MISSION</a></div>
                 <?php
                 if (!array_key_exists('idPlayer',$_SESSION) OR empty($_SESSION['idPlayer'])) {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php">S’INSCRIRE/SE CONNECTER</a></div><?php
                 } else {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DÉCONNECTER</a></div><?php
                 }
                 ?>
             </div>

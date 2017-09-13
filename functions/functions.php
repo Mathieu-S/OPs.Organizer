@@ -2,10 +2,10 @@
 
 /**
  * @return PDO
- * Permet la connexion à la base de donnée
+ * Permets la connexion à la base de données
  */
 function connectionDB() {
-    $db = new PDO("mysql:host=localhost;dbname=opo;charset=utf8", "root", "root");
+    $db = new PDO("mysql:host=localhost;dbname=opo;charset=utf8", "root", "");
     return $db;
 }
 
@@ -18,7 +18,7 @@ function connectionDB() {
  */
 function addUser() {
     $db=connectionDB();
-    //Vérifie si l'email n'est pas déjà utilisé
+    // Vérifie si l'email n'est pas déjà utilisé
     $query = $db->prepare("SELECT * FROM `players` WHERE email = :email");
     $query->bindParam(':email', $_POST['email']);
     $query->execute();
@@ -26,7 +26,7 @@ function addUser() {
     if ($row['email'] == $_POST['email']){
         return false;
     }
-    //Vérifie si le speudo n'est pas déjà utilisé
+    // Vérifie si le pseudo n'est pas déjà utilisé
     $query = $db->prepare("SELECT * FROM `players` WHERE pseudo = :pseudo");
     $query->bindParam(':pseudo', $_POST['pseudo']);
     $query->execute();
@@ -34,7 +34,7 @@ function addUser() {
     if ($row['pseudo'] == $_POST['pseudo']) {
         return false;
     }
-    //Ajoute l'utilisateur à la base de données.
+    // Ajoute l'utilisateur à la base de données.
     $mdp = password_hash($_POST['mdp'], PASSWORD_DEFAULT);
     $query = $db->prepare("INSERT INTO `players`(`pseudo`, `mdp`, `email`) VALUES (:pseudo, :mdp, :email)");
     $query->bindParam(':pseudo', $_POST['pseudo']);
@@ -45,7 +45,7 @@ function addUser() {
 }
 
 /**
- * Permet de se connecter et d'initialiser une session
+ * Permets de se connecter et d'initialiser une session
  */
 function connectUser() {
     $db = connectionDB();
@@ -96,7 +96,7 @@ function addMission() {
 }
 
 //////////////////////////////////////
-//    Gère les escouades/présence   //
+//    Gère les escouades/présences  //
 //////////////////////////////////////
 
 /**
@@ -116,7 +116,7 @@ function dejaInscrit($idMission) {
 }
 
 /**
- * Rafraichie le nombre de joueurs inscrit à une mission
+ * Rafraichit le nombre de joueurs inscrit à une mission
  */
 function refreshNbPlayerInscrit($idMission) {
     $db = connectionDB();
@@ -181,7 +181,7 @@ function getPresenceByIdMission($idMission) {
 }
 
 /**
- * indique la présence ou non du joueur
+ * Indique la présence ou non du joueur
  */
 function getEscouadesByIdMisssion($idMission) {
     $db=connectionDB();

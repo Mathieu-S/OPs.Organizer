@@ -13,7 +13,7 @@ if(isset($_GET['logout'])) {
 } elseif (isset($_GET['noAcces'])) {
     $script = "<script>Materialize.toast('Votre niveau d\'habilitation est trop faible pour pouvoir créer une mission.', 4000)</script>";
 } elseif (isset($_GET['noLoged'])) {
-    $script = "<script>Materialize.toast('Vous devez être connecter pour créer une mission', 4000)</script>";
+    $script = "<script>Materialize.toast('Vous devez être connecté pour créer une mission', 4000)</script>";
 
 
 } elseif (isset($_POST['INS'])) {
@@ -51,12 +51,12 @@ if (isset($_SESSION['idPlayer'])) {
         <nav class="container">
             <div class="row">
                 <div class="col s4 center"><a class="font-purista" href="index.php">ACCEUIL</a></div>
-                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉÉR UNE MISSION</a></div>
+                <div class="col s4 center"><a class="font-purista" href="addMission.php">CRÉER UNE MISSION</a></div>
                 <?php
                 if (!array_key_exists('idPlayer',$_SESSION) OR empty($_SESSION['idPlayer'])) {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php">S'INSCRIRE/SE CONNECTER</a></div><?php
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php">S’INSCRIRE/SE CONNECTER</a></div><?php
                 } else {
-                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DECONNECTER</a></div><?php
+                    ?><div class="col s4 center"><a class="font-purista" href="login.php?logout">SE DÉCONNECTER</a></div><?php
                 }
                 ?>
             </div>
@@ -94,10 +94,10 @@ if (isset($_SESSION['idPlayer'])) {
                                 <div class="col s12 m6">
                                     <p>
                                         <b>Nom de code : </b><?php echo($mission['nom']); ?><br>
-                                        <b>Date fixé : </b><?php echo($mission['date']); ?><br>
-                                        <b>Nombre de joueur conseillé : </b><?php echo($mission['nbRqMinPlayer']); ?>-<?php echo($mission['nbRqMaxPlayer']); ?><br>
-                                        <b>Nombre de joueur inscrit : </b><?php echo($mission['nbInsPlayer']); ?><br>
-                                        <b>Faction jouer : </b><?php echo($mission['faction']); ?><br>
+                                        <b>Date fixée : </b><?php echo($mission['date']); ?><br>
+                                        <b>Nombre de joueurs conseillé : </b><?php echo($mission['nbRqMinPlayer']); ?>-<?php echo($mission['nbRqMaxPlayer']); ?><br>
+                                        <b>Nombre de joueurs inscrit : </b><?php echo($mission['nbInsPlayer']); ?><br>
+                                        <b>Faction joué : </b><?php echo($mission['faction']); ?><br>
                                         <b>Localisation : </b><?php echo($mission['map']); ?><br>
                                     </p>
                                 </div>
